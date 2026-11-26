@@ -106,6 +106,18 @@ export function updateStory(id, patch) {
 }
 export const srsBox = id => state.srs[id]?.box ?? 0;
 
+// ---- Dialogues: best average score per dialogue, role and level ----
+export function dialogBest(id) {
+  state.dialogs ??= {};
+  return state.dialogs[id] ?? {};
+}
+export function saveDialogScore(id, key, score) {
+  state.dialogs ??= {};
+  const d = (state.dialogs[id] ??= {});
+  d[key] = Math.max(d[key] ?? 0, score);
+  save();
+}
+
 // ---- Backup ----
 export function exportJSON() { return JSON.stringify(state, null, 2); }
 export function importJSON(text) {

@@ -8,6 +8,8 @@ import { DAYS, blocksFor, dayByNumber } from './data/plan.js';
 import { drillRunner, shadowRunner, chunkRunner, roleplayRunner, monologRunner, discussionRunner, talkRunner, mockRunner } from './runners.js';
 import { STORIES } from './data/stories.js';
 import { storyRunner } from './story.js';
+import { DIALOGUES } from './data/dialogues.js';
+import { dialogRunner } from './dialog.js';
 
 const view = document.getElementById('view');
 
@@ -180,6 +182,7 @@ function runBlock(root, b, n) {
     case 'talk': talkRunner(root, b.questions); break;
     case 'mock': mockRunner(root, topicById[b.topics[0]], topicById[b.topics[1]]); break;
     case 'story': storyRunner(root, STORIES[b.topic], { onFinish: updateDue }); break;
+    case 'dialog': dialogRunner(root, DIALOGUES[b.topic]); break;
     default: root.append(h('p', {}, 'Unknown block.'));
   }
 }
@@ -218,7 +221,15 @@ function viewPractice() {
       h('section', { class: 'stack' }, h('h2', {}, 'Grammatik'),
         h('ul', { class: 'index-list' }, GRAMMAR.map(g => h('li', {}, h('a', { href: `#/grammar/${g.id}` }, h('span', { lang: 'de' }, g.title), h('span', { class: 'lvl' }, g.level)))))),
       h('section', { class: 'stack' }, h('h2', {}, 'Themen'),
-        h('ul', { class: 'index-list' }, TOPICS.map(t => h('li', {}, h('a', { href: `#/topic/${t.id}` }, h('span', { lang: 'de' }, t.title), h('span', { class: 'lvl' }, t.en))))))));
+        h('ul', { class: 'index-list' }, TOPICS.map(t => h('li', {}, h('a', { href: `#/topic/${t.id}` }, h('span', { lang: 'de' }, t.title), h('span', { class: 'lvl' }, t.en))))))),
+    h('section', { class: 'stack', style: 'margin-top:36px' }, h('h2', {}, 'Dialoge'),
+      h('p', { class: 'muted' }, 'Everyday conversations to rehearse: listen, then play one role with less and less help.'),
+      h('ul', { class: 'index-list' }, TOPICS.map(t => {
+        const d = DIALOGUES[t.id];
+        const best = Math.max(0, ...Object.values(store.dialogBest(t.id)));
+        return h('li', {}, h('a', { href: `#/topic/${t.id}/dialog` }, h('span', { lang: 'de' }, d.title),
+          h('span', { class: 'lvl' }, best ? `best ${best} %` : `${d.roles.A} & ${d.roles.B}`)));
+      }))));
 }
 
 function viewGrammar(id) {
@@ -234,6 +245,7 @@ function viewGrammar(id) {
 
 const ACTIVITIES = [
   ['story', 'Geschichte', t => `${STORIES[t.id].title} · ${STORIES[t.id].words.length} new words`],
+  ['dialog', 'Dialog', t => DIALOGUES[t.id].title],
   ['chunks', 'Redewendungen', 'Phrases to learn'],
   ['shadow', 'Shadowing', 'Listen and repeat'],
   ['roleplay', 'Rollenspiel', t => t.roleplay.title],

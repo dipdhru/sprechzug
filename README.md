@@ -26,6 +26,7 @@ The mic only works on `localhost` or https, so opening `index.html` directly as 
 | Grammatik sprechen | Say the transformed sentence; word-by-word feedback |
 | Shadowing | Hear a sentence, repeat it, get a similarity score |
 | Geschichte | 12 short stories (comprehensible input): listen → read with tap-to-gloss → answer questions → retell using the new words |
+| Dialog | 12 everyday scripted dialogues in two voices. Play one role in 4 levels: listen → with text → first-letter hints → from English only; swap roles |
 | **Wörter** | 169 B1+/B2 words from the stories, with article, plural and review status; practise per topic |
 | Redewendungen | 144 useful phrases, learned by ear, then produced from English |
 | Rollenspiel | 12 scripted conversations (doctor, job interview, landlord, hotel …) |

@@ -27,16 +27,30 @@ function pickVoice() {
   return voices.find(v => v.lang === 'de-DE') || voices[0];
 }
 
-export function speak(text, { rate } = {}) {
+/** A second German voice for the other dialogue role (or the same voice, pitched differently). */
+function otherVoice(main) {
+  return voices.find(v => v !== main && v.lang === 'de-DE') || voices.find(v => v !== main) || null;
+}
+
+/** speak(text, { rate, role: 'B' }) — role 'B' uses a second voice so dialogues have two speakers. */
+export function speak(text, { rate, role } = {}) {
   return new Promise(resolve => {
     if (!canSpeak || !text) return resolve();
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'de-DE';
-    const v = pickVoice();
+    const main = pickVoice();
+    let v = main;
+    if (role === 'B') {
+      const alt = otherVoice(main);
+      if (alt) v = alt; else u.pitch = 1.35;
+    }
     if (v) u.voice = v;
     u.rate = rate ?? settings().rate;
-    u.onend = u.onerror = () => resolve();
+    // Some mobile engines never fire onend; don't let a dialogue hang on it.
+    const maxMs = 3000 + (text.length * 90) / u.rate;
+    const timer = setTimeout(resolve, maxMs);
+    u.onend = u.onerror = () => { clearTimeout(timer); resolve(); };
     speechSynthesis.speak(u);
   });
 }

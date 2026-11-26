@@ -2,6 +2,7 @@
 import { GRAMMAR, grammarById } from './grammar.js';
 import { TOPICS, topicById } from './topics.js';
 import { STORIES } from './stories.js';
+import { DIALOGUES } from './dialogues.js';
 
 const L = (n, g, t) => ({ n, kind: 'learn', grammar: [g], topics: [t] });
 const R = (n, g, t, title) => ({ n, kind: 'review', grammar: g, topics: t, title });
@@ -59,14 +60,15 @@ export function blocksFor(day, hours = 3) {
     const g = grammarById[day.grammar[0]];
     const examType = day.n % 2 ? 'vortrag' : 'diskussion';
     add('review', 'review', 'Wiederholen', 'Speak the phrases and sentences that are due today.', 15);
-    add('shadow', 'shadow', 'Shadowing', 'Listen and repeat at full speed to train pronunciation and rhythm.', 15, { sentences: topic.shadow });
+    add('shadow', 'shadow', 'Shadowing', 'Listen and repeat at full speed to train pronunciation and rhythm.', 10, { sentences: topic.shadow });
     add('grammar', 'grammar', 'Grammatik sprechen', g.title, 30, { units: [g.id], drills: g.drills });
     add('story', 'story', 'Geschichte: Hören & Lesen', `„${STORIES[topic.id].title}“: ${STORIES[topic.id].words.length} new words in context`, 25, { topic: topic.id });
-    add('chunks', 'chunks', 'Redewendungen', `${topic.title}: 12 phrases to make your own`, 15, { topic: topic.id });
-    add('roleplay', 'roleplay', 'Rollenspiel', topic.roleplay.title, 25, { topic: topic.id });
+    add('dialog', 'dialog', 'Dialog sprechen', `„${DIALOGUES[topic.id].title}“: rehearse both roles`, 20, { topic: topic.id });
+    add('chunks', 'chunks', 'Redewendungen', `${topic.title}: 12 phrases to make your own`, 10, { topic: topic.id });
+    add('roleplay', 'roleplay', 'Rollenspiel', topic.roleplay.title, 20, { topic: topic.id });
     add('exam', examType, examType === 'vortrag' ? 'Prüfung: Vortrag' : 'Prüfung: Diskussion',
       examType === 'vortrag' ? topic.vortrag.title : topic.diskussion.question, 30, { topic: topic.id });
-    add('talk', 'talk', 'Freies Sprechen', 'Talk for two minutes about each question.', 15, { questions: topic.talk });
+    add('talk', 'talk', 'Freies Sprechen', 'Talk for two minutes about each question.', 10, { questions: topic.talk });
   } else if (day.kind === 'review') {
     const drills = day.grammar.flatMap((gid, i) => pick(grammarById[gid].drills, day.grammar.length > 2 ? 3 : 6, day.n * 10 + i));
     const shadow = day.topics.flatMap((tid, i) => pick(topicById[tid].shadow, day.topics.length > 1 ? 1 : 6, day.n + i));

@@ -340,3 +340,11 @@ details.rule[open] summary { margin-bottom: 10px; }
 .box-pill.b2, .box-pill.b3 { background: var(--amber-soft); color: var(--amber); }
 .box-pill.b4, .box-pill.b5, .box-pill.b6 { background: var(--green-soft); color: var(--green); }
 .search { width: 100%; max-width: 420px; }
+
+/* ---- Dialogues ---- */
+.dl-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 4px 6px; border-radius: var(--radius-s); }
+.dl-row .bubble { max-width: 100%; justify-self: start; }
+.dl-row.reading { background: var(--blue-soft); }
+.bubble-en { display: block; font-size: 0.85rem; opacity: 0.75; margin-top: 4px; font-style: italic; }
+.hide-en .bubble-en { display: none; }
+.dl-prompt { font-size: 1.25rem; font-weight: 500; letter-spacing: 0.02em; }
