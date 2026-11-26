@@ -3,6 +3,10 @@
 A speaking-first web app: a 30-day plan of 2–3 hours a day, from B1.1 to B2 speaking.
 No account, no API key, no build step. Your progress is saved in your browser.
 
+**Live:** <https://dipdhru.github.io/sprechzug/> (works on phones; allow the microphone)
+
+To publish changes: `git add -A && git commit -m "…" && git push`. GitHub Pages updates in about a minute.
+
 ## Start it
 
 ```bash
